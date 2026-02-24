@@ -14,7 +14,7 @@ HISTCONTROL=ignoredups:ignorespace
 HISTSIZE=5000
 HISTFILESIZE=10000
 
-export PROMPT_COMMAND="history -a; history -c; history -r"
+export PROMPT_COMMAND="history -a; history -n"
 
 
 ########################################
@@ -46,37 +46,40 @@ fi
 
 
 ########################################
-# 3. Fast Git Prompt (Optimized)
+# 3. Fast Git Prompt
 ########################################
 __git_prompt() {
-
+    GIT_PS1=""
     git rev-parse --is-inside-work-tree &>/dev/null || return
 
     local branch status=""
-
-    branch=$(git branch --show-current 2>/dev/null ||
-             git rev-parse --short HEAD 2>/dev/null)
+    branch=$(git branch --show-current 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 
     git diff --cached --quiet        || status+="+"
-    git diff-files --quiet          || status+="!"
+    git diff-files --quiet           || status+="!"
     [[ -n $(git ls-files --others --exclude-standard) ]] && status+="?"
     git rev-parse --verify refs/stash &>/dev/null && status+="$"
 
     [[ -n $status ]] && status=" [$status]"
-
-    echo " ${p_violet}on ${p_purple}${branch}${p_blue}${status}${p_reset}"
+    GIT_PS1=" ${p_violet}on ${p_purple}${branch}${p_blue}${status}${p_reset}"
 }
 
 
 ########################################
 # 4. Prompt System
 ########################################
-__exit_status() {
+__build_prompt() {
     local s=$?
-    (( s != 0 )) && echo " ${p_orange}✘${s}${p_reset}"
+    
+    EXIT_PS1=""
+    (( s != 0 )) && EXIT_PS1=" ${p_orange}✘${s}${p_reset}"
+    
+    __git_prompt
 }
 
-PS1='${p_blue}\W${p_reset}$(__git_prompt)$(__exit_status)\n\$ '
+PROMPT_COMMAND="__build_prompt; $PROMPT_COMMAND"
+
+PS1='${p_blue}\W${p_reset}${GIT_PS1}${EXIT_PS1}\n\$ '
 
 
 ########################################
@@ -105,34 +108,46 @@ mkcd() {
 
 # Safe Git Sync
 save() {
-
+    # 1. Verify we are in a Git repository
     git rev-parse --is-inside-work-tree &>/dev/null || {
-        echo "❌ Not a git repository"
+        echo "❌ Error: Not a git repository."
         return 1
     }
 
-    local target=${1:-.}
-    local msg=${2:-"update $target"}
+    local target="."
+    local msg="Auto-update"
+    local do_push=false
+
+    for arg in "$@"; do
+        if [[ "$arg" == "--push" ]]; then
+            do_push=true
+        elif [[ "$target" == "." && "$arg" != -* ]]; then
+            target="$arg"
+        elif [[ "$msg" == "Auto-update" && "$arg" != -* ]]; then
+            msg="$arg"
+        fi
+    done
+
     local stashed=false
 
-    echo "💾 Sync starting..."
+    echo "💾 Syncing repository..."
 
     if [[ -n $(git status --porcelain) ]]; then
-        echo "📦 Stashing..."
+        echo "📦 Stashing current changes..."
         git stash push -u -m "autosave-$(date +%F-%T)"
         stashed=true
     fi
 
-    echo "📥 Pulling..."
+    echo "📥 Pulling remote changes (rebase)..."
     git pull --rebase || {
-        echo "❌ Pull failed"
+        echo "❌ Error: Pull failed. Please resolve manually."
         return 1
     }
 
     if $stashed; then
-        echo "📤 Restoring..."
+        echo "📤 Restoring stashed changes..."
         git stash apply || {
-            echo "⚠️ Conflict. Stash kept."
+            echo "⚠️ Warning: Merge conflict detected. Stash retained for manual resolution."
             return 1
         }
         git stash drop
@@ -141,11 +156,17 @@ save() {
     git add "$target"
 
     if ! git diff-index --quiet HEAD --; then
-        git commit -m "$msg" &&
-        git push &&
-        echo "✅ Done"
+        git commit -m "$msg"
+        echo "✅ Changes committed locally."
+        
+        if $do_push; then
+            echo "🚀 Pushing to remote repository..."
+            git push && echo "✅ Push successful."
+        else
+            echo "ℹ️ Push skipped. Use 'git push' to upload, or run save with '--push'."
+        fi
     else
-        echo "ℹ️ Nothing to commit"
+        echo "ℹ️ No changes detected to commit."
     fi
 }
 
@@ -181,7 +202,6 @@ esac
 
 [[ $OS == mac && -f "$DOTFILES/install/macos.sh" ]] && source "$DOTFILES/install/macos.sh"
 
-# 3. 针对 Codespaces (Linux) 的特殊调优（可选）
 if [[ $OS == linux && -n "$CODESPACES" ]]; then
     export NODE_OPTIONS="--max-old-space-size=4096"
 fi
