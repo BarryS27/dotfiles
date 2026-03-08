@@ -1,0 +1,12 @@
+{
+  "name": "dotfiles",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "postCreateCommand": "bash -lc 'if command -v apt-get >/dev/null 2>&1; then sudo apt-get update && sudo apt-get install -y stow zsh fzf bat; fi'",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
+}

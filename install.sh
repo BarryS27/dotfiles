@@ -1,122 +1,114 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-#######################################
-# 1. Paths & Variables
-#######################################
-REPO_URL="https://github.com/BarryS27/dotfiles.git"
-HOME_DIR="$HOME"
-DOTFILES_DIR="$HOME_DIR/dotfiles"
-BACKUP_DIR="$HOME_DIR/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
+HOME_DIR="${HOME}"
+BACKUP_DIR="$HOME_DIR/.dotfiles_backup"
 
-echo "🛠️  Installing dotfiles for Bairu Song..."
-
-#######################################
-# 2. Utils
-#######################################
 log() {
-    printf "➜ %s\n" "$1"
+    printf '➜ %s\n' "$1"
 }
 
-backup() {
-    local target=$1
-    if [ -e "$target" ] || [ -L "$target" ]; then
-        mkdir -p "$BACKUP_DIR/$(dirname "$target")"
-        mv "$target" "$BACKUP_DIR/$target"
-        log "Backed up $target"
+install_stow() {
+    if command -v stow >/dev/null 2>&1; then
+        return
+    fi
+
+    log "Installing GNU Stow..."
+    if command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update
+        sudo apt-get install -y stow
+    elif command -v brew >/dev/null 2>&1; then
+        brew install stow
+    else
+        echo "❌ Could not install stow automatically (missing apt-get/brew)." >&2
+        exit 1
     fi
 }
 
-link() {
-    local src=$1
-    local dest=$2
-    backup "$dest"
-    ln -sfn "$src" "$dest"
-    log "Linked $dest → $src"
+install_zsh() {
+    if command -v zsh >/dev/null 2>&1; then
+        return
+    fi
+
+    log "Installing zsh..."
+    if command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update
+        sudo apt-get install -y zsh
+    elif command -v brew >/dev/null 2>&1; then
+        brew install zsh
+    else
+        echo "❌ Could not install zsh automatically (missing apt-get/brew)." >&2
+        exit 1
+    fi
 }
 
-#######################################
-# 3. Clone / Update Repository
-#######################################
-if [ ! -d "$DOTFILES_DIR" ]; then
-    log "Cloning dotfiles from $REPO_URL..."
-    git clone "$REPO_URL" "$DOTFILES_DIR"
-else
-    log "Dotfiles directory already exists at $DOTFILES_DIR. Pulling latest..."
-    git -C "$DOTFILES_DIR" pull origin main --quiet || log "⚠️  Could not pull latest updates."
-fi
+backup_if_real_file() {
+    local target="$1"
 
-mkdir -p "$BACKUP_DIR"
+    if [[ -e "$target" && ! -L "$target" ]]; then
+        local rel="${target#$HOME_DIR/}"
+        local destination="$BACKUP_DIR/$rel"
+        mkdir -p "$(dirname "$destination")"
+        mv "$target" "$destination"
+        log "Backed up $target -> $destination"
+    fi
+}
 
-#######################################
-# 4. OS Detect
-#######################################
-case "$(uname -s)" in
-    Darwin) OS="mac" ;;
-    Linux)  OS="linux" ;;
-    *)      OS="unknown" ;;
-esac
-log "Detected OS: $OS"
+ensure_stow_targets() {
+    mkdir -p "$HOME_DIR/.config/nvim"
+    mkdir -p "$HOME_DIR/bin"
+}
 
-#######################################
-# 5. Symlinks (Fixed Paths)
-#######################################
-log "Linking configs..."
+maybe_switch_to_zsh() {
+    local current_shell
+    current_shell="${SHELL:-}"
 
-link "$DOTFILES_DIR/.bashrc" "$HOME_DIR/.bashrc"
-link "$DOTFILES_DIR/git/.gitignore_global" "$HOME_DIR/.gitignore_global"
-link "$DOTFILES_DIR/git/.gitconfig" "$HOME_DIR/.gitconfig"
+    if [[ "$current_shell" == *"/zsh" ]]; then
+        log "Default shell is already zsh."
+        return
+    fi
 
-#######################################
-# 6. Git Global Config
-#######################################
-log "Configuring git..."
-git config --global core.excludesfile "$HOME_DIR/.gitignore_global"
+    local zsh_path
+    zsh_path="$(command -v zsh)"
 
-#######################################
-# 7. Platform Install
-#######################################
-if [[ -x "$DOTFILES_DIR/install/$OS.sh" ]]; then
-    log "Running $OS setup..."
-    bash "$DOTFILES_DIR/install/$OS.sh"
-else
-    log "No platform installer found. Skipping."
-fi
+    if ! grep -qx "$zsh_path" /etc/shells; then
+        echo "❌ zsh path not present in /etc/shells: $zsh_path" >&2
+        exit 1
+    fi
 
-#######################################
-# 8. Codespaces
-#######################################
-if [[ -n "${CODESPACES:-}" ]]; then
-    log "Configuring Codespaces..."
-    SETTINGS="/home/vscode/.vscode-remote/data/Machine/settings.json"
-    mkdir -p "$(dirname "$SETTINGS")"
-    [[ -f $SETTINGS ]] || echo "{}" > "$SETTINGS"
+    log "Changing default shell to zsh..."
+    chsh -s "$zsh_path"
+}
 
-    python3 <<EOF
-import json
-path = "$SETTINGS"
-with open(path) as f:
-    data = json.load(f)
-data.update({
-    "workbench.editor.labelFormat": "short",
-    "window.title": "\${activeEditorMedium}\${separator}\${rootName}",
-    "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000
-})
-with open(path, "w") as f:
-    json.dump(data, f, indent=2)
-EOF
-    log "Codespaces ready"
-fi
+main() {
+    cd "$(dirname "$0")"
 
-#######################################
-# Done
-#######################################
-cat <<EOF
+    install_stow
+    install_zsh
+
+    mkdir -p "$BACKUP_DIR"
+    ensure_stow_targets
+
+    backup_if_real_file "$HOME_DIR/.zshrc"
+    backup_if_real_file "$HOME_DIR/.zprofile"
+    backup_if_real_file "$HOME_DIR/aliases.zsh"
+    backup_if_real_file "$HOME_DIR/.gitconfig"
+    backup_if_real_file "$HOME_DIR/.gitignore_global"
+    backup_if_real_file "$HOME_DIR/.config/nvim/init.lua"
+    backup_if_real_file "$HOME_DIR/bin/sync-barrys27-ui"
+
+    log "Applying GNU Stow packages..."
+    stow -T "$HOME_DIR" zsh git nvim scripts
+
+    maybe_switch_to_zsh
+
+    cat <<MSG
 
 ✨ Installation complete.
-
-Backups saved in: $BACKUP_DIR
+Backups directory: $BACKUP_DIR
 Reload shell:
-  source ~/.bashrc
-EOF
+  exec zsh
+MSG
+}
+
+main "$@"

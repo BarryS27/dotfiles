@@ -1,0 +1,5 @@
+brew "stow"
+brew "fzf"
+brew "bat"
+brew "eza"
+brew "zoxide"

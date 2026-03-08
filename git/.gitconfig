@@ -14,5 +14,8 @@
 	cm = commit
 	unstage = reset HEAD --
 	last = log -1 HEAD
+	lg = log --graph --decorate --pretty=format:'%C(yellow)%h%Creset %C(auto)%d%Creset %s %C(blue)- %an, %ar%Creset' --abbrev-commit
 [color]
 	ui = auto
+[include]
+	path = ~/.gitconfig.local
