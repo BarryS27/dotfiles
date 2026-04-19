@@ -1,0 +1,72 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noVar": "error",
+        "useConst": "error",
+        "noNonNullAssertion": "warn"
+      },
+      "suspicious": {
+        "noConsoleLog": "off",
+        "noEval": "error",
+        "noImplicitAnyLet": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": {
+          "level": "warn",
+          "options": {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        },
+        "noImplicitGlobals": "error",
+        "noUndeclaredVariables": "error"
+      },
+      "complexity": {
+        "useSimpleNumberKeys": "warn",
+        "noElseReturn": "warn"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 4,
+    "lineEnding": "lf",
+    "lineWidth": 100,
+    "attributePosition": "auto"
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "quoteStyle": "double",
+      "trailingCommas": "es5",
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "arrowParentheses": "asNeeded"
+    }
+  },
+  "json": {
+    "formatter": {
+      "indentWidth": 2
+    }
+  },
+  "overrides": [
+    {
+      "include": ["*.json", "*.yml", "*.yaml"],
+      "formatter": {
+        "indentWidth": 2
+      }
+    }
+  ],
+  "files": {
+    "ignore": ["dist/**", "build/**", "*.min.js", "vendor/**", "node_modules/**"]
+  }
+}
