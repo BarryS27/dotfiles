@@ -1,0 +1,68 @@
+[project]
+name = "_"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.14"
+license = { file = "LICENSE" }
+authors = [{ name = "asong56", email = "hello@example.com" }]
+dependencies = [
+    "loguru>=0.7.2",
+    "pydantic>=2.10.0",
+    "httpx[http2]>=0.28.0",
+    "rich>=13.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# ------------------------------------------------------------------------------
+# 📦 UV & DEV TOOLS
+# ------------------------------------------------------------------------------
+[tool.uv]
+dev-dependencies = [
+    "pytest-asyncio>=0.23.0",
+    "ipython>=8.30.0",
+    "icecream>=2.1.0",
+    "devtools>=0.12.0",
+    "pyinstrument>=4.6.0",
+]
+
+# ------------------------------------------------------------------------------
+# 🛠️ RUFF
+# ------------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D", "ANN101", "COM812", "ISC001", "T201",
+    "FIX",
+    "TD",
+    "ERA001",
+]
+
+isort.combine-as-imports = true
+isort.lines-after-imports = 2
+pylint.max-args = 5
+mccabe.max-complexity = 10
+
+# ------------------------------------------------------------------------------
+# 🕵️ TYPE CHECKING
+# ------------------------------------------------------------------------------
+[tool.pyright]
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+
+# ------------------------------------------------------------------------------
+# 🧪 PYTEST
+# ------------------------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts = "--durations=5 -vv"
+asyncio_mode = "auto"
+testpaths = ["tests"]
