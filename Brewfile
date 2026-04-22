@@ -18,7 +18,6 @@ brew "git"
 brew "ripgrep"        # grep replacement (rg)
 
 # ── Dev tools ────────────────────────────
-brew "neovim"
 brew "gh"             # GitHub CLI
 
 # ── Runtimes ─────────────────────────────

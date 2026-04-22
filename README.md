@@ -21,21 +21,13 @@ On first Neovim launch, lazy.nvim bootstraps itself and installs all plugins aut
 ```
 dotfiles/
 ├── bin/
-│   ├── note.sh             search ~/Me.archive with fzf
 │   └── npm-publish.sh      version bump + publish to npm
 ├── git/
 │   ├── .gitconfig          delta pager, rerere, histogram diff
 │   └── .gitignore_global
-├── nvim/.config/nvim/
-│   ├── init.lua            lazy.nvim entry point
-│   └── lua/
-│       ├── core/
-│       │   ├── options.lua
-│       │   └── keymaps.lua
-│       └── plugins/
-│           └── init.lua    all plugins in one file
-├── scripts/bin/
-│   └── sync-barrys27-ui    sync @barrys27/ui CSS to local target
+├── did/
+│   ├── bin/
+│   └── identity/
 └── zsh/
     ├── .zprofile           PATH, exports, tool init (login shell)
     ├── .zshrc              completion, prompt, zoxide, key bindings

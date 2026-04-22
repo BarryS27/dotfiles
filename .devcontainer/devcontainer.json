@@ -2,7 +2,7 @@
   "name": "dotfiles",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 
-  "postCreateCommand": "bash -lc 'sudo apt-get update -qq && sudo apt-get install -y stow zsh fzf bat fd-find ripgrep neovim git && ./install.sh'",
+  "postCreateCommand": "bash -lc 'sudo apt-get update -qq && sudo apt-get install -y stow zsh git && ./install.sh'",
 
   "customizations": {
     "vscode": {
