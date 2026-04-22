@@ -1,0 +1,138 @@
+{
+    "profile": {
+        "name": "Ansel",
+        "full_name": "Bairu Song",
+        "title": "High School Student · Data Enthusiast",
+        "location": "Massachussetts"
+    },
+    "about": {
+        "paragraphs": [
+            "I'm a high school student passionate about data-driven decision making. My journey started with building a self-used academic manager CLI tool, and now I'm diving deep into data analyzation and visualization."
+        ],
+        "interests": [
+            {"label": "Coding", "icon": "code", "color": "blue"},
+            {"label": "Business", "icon": "briefcase", "color": "gray"},
+            {"label": "Music", "icon": "music", "color": "orange"},
+            {"label": "Learning", "icon": "book", "color": "green"},
+            {"label": "Soccer", "icon": "futbol", "color": "purple"}
+        ]
+    },
+    "now": {
+        "research": "Mongols",
+        "listen": "Skyfall by Adele",
+        "read": "Lord of the Flies"
+    },
+    "skills": [
+        {
+            "category": "Data Science & Logic",
+            "items": [
+                {"name": "Python", "icon": "fa-brands fa-python", "color": "blue"},
+                {"name": "SQL (MySQL/Postgres/SQLite)", "icon": "database", "color": "green"},
+                {"name": "Pandas", "icon": "table", "color": "purple"},
+                {"name": "NumPy", "icon": "calculator", "color": "orange"},
+                {"name": "Matplotlib/Seaborn", "icon": "chart-area", "color": "blue"}
+            ]
+        },
+        {
+            "category": "Full-Stack Development",
+            "items": [
+                {"name": "C", "icon": "c", "color": "blue"},
+                {"name": "Flask & Jinja", "icon": "flask", "color": "red"},
+                {"name": "HTML5 / CSS3", "icon": "code", "color": "blue"},
+                {"name": "SCSS / UI Arch", "icon": "fa-brands fa-sass", "color": "purple"}
+            ]
+        },
+        {
+            "category": "Workflow & Productivity",
+            "items": [
+                {"name": "Git / GitHub Pages", "icon": "fa-brands fa-git", "color": "gray"},
+                {"name": "NPM Packaging", "icon": "fa-brands fa-npm", "color": "red"},
+                {"name": "VS Code / Jupyter / Colab", "icon": "code", "color": "blue"},
+                {"name": "Markdown", "icon": "fa-brands fa-markdown", "color": "gray"}
+            ]
+        },
+        {
+            "category": "Global & Business",
+            "items": [
+                {"name": "Inbound Marketing", "icon": "bullhorn", "color": "orange"},
+                {"name": "Excel", "icon": "file-excel", "color": "green"},
+                {"name": "Chinese (Native)", "icon": "language", "color": "red"},
+                {"name": "German (A2)", "icon": "language", "color": "orange"}
+            ]
+        }
+    ],
+    "awards": [
+        {
+            "title": "Yale: The Science of Well-Being Certificate",
+            "description": "Not very important",
+            "link": "https://coursera.org/share/c3626e0dfc91bb8bbc5c6962b55ff5f9"
+        },
+        {
+            "title": "CS50x Certificate",
+            "description": "Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
+            "link": "https://certificates.cs50.io/e7322fd8-f79a-4b52-81e0-b723d431409e.pdf?size=letter"
+        },
+        {
+            "title": "CS50p Certificate",
+            "description": "An in-depth introduction to programming with Python, focusing on object-oriented design and library integration.",
+            "link": "https://certificates.cs50.io/fb71fc53-2fc2-4d31-b1e1-1151c0774de3.pdf?size=letter"
+        },
+        {
+            "title": "CS50sql Certificate",
+            "description": "A specialized course on relational database design, focusing on SQL, data modeling, and SQLite optimization.",
+            "link": "https://certificates.cs50.io/929f5a2c-bb83-41c8-9b2d-e81914bde916.pdf?size=letter"
+        },
+        {
+            "title": "Literary Achievement Award",
+            "description": "Awarded for the \"Most Creative Project\" in Grade 9 Literature & Composition 1 for the Flash Fiction Portfolio project.",
+            "link": "https://drive.google.com/file/d/1zaG7i2719bMFPoppC0buBTWwKAlP8YfI/view"
+        },
+        {
+            "title": "Inbound Marketing Certificate",
+            "description": "",
+            "link": "https://app-na2.hubspot.com/academy/achievements/h063b68r/en/1/bairu-song/inbound-marketing"
+        }
+    ],
+    "projects": [
+        {
+            "title": "Cicada Whiteboard",
+            "description": "A minimalist, high-performance digital whiteboard for the web. Supports infinite canvas and image export.",
+            "link": "https://github.com/Ansel-S/Cicada",
+            "tags": ["HTML"],
+            "image": "",
+            "color": "blue"
+        },
+        {
+            "title": "Urban Scaling Simulator",
+            "description": "A data analysis project exploring the relationship between city size and various urban metrics.",
+            "link": "https://github.com/BarryS27/Urban-Scaling-Simulator",
+            "tags": ["Python", "Pandas", "Matplotlib"],
+            "image": "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=600&fit=crop",
+            "color": "blue"
+        },
+        {
+            "title": "Financial-Terminal-Lite",
+            "description": "A lite web application with stock screener, heatmap and advanced chart.",
+            "link": "https://github.com/BarryS27/Financial-Terminal-Lite",
+            "tags": ["Web", "Finance"],
+            "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",
+            "color": "green"
+        },
+        {
+            "title": "Iris Morphological Study",
+            "description": "High-dimensional taxonomy analysis using Fisher's Iris Dataset to study morphological divergence.",
+            "link": "https://github.com/BarryS27/Iris-Data-Analysis",
+            "tags": ["Data Science", "Analytics", "Python"],
+            "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=600&fit=crop",
+            "color": "purple"
+        },
+        {
+            "title": "@barrys27/ui",
+            "description": "A minimalist CSS/SCSS architecture inspired by iOS HIG, designed for high-density data interfaces. Status: Published on npm.",
+            "link": "https://www.npmjs.com/package/@barrys27/ui/",
+            "tags": ["UI Architecture", "SCSS", "NPM"],
+            "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop",
+            "color": "gray"
+        }
+    ]
+}
