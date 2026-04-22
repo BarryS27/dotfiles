@@ -1,0 +1,31 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1"
+  ],
+  "id": "did:as:asong56",
+
+  "verificationMethod": [
+    {
+      "id": "did:as:asong56#key-1",
+      "type": "Ed25519VerificationKey2020",
+      "controller": "did:as:asong56",
+      "publicKeyBase64": "{{ PUBLIC_KEY_BASE64 }}"
+    }
+  ],
+
+  "authentication": [
+    "did:as:asong56#key-1"
+  ],
+
+  "assertionMethod": [
+    "did:as:asong56#key-1"
+  ],
+
+  "service": [
+    {
+      "id": "did:as:asong56#profile",
+      "type": "LinkedDomains",
+      "serviceEndpoint": "https://github.com/asong56"
+    }
+  ]
+}
