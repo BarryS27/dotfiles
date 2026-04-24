@@ -15,7 +15,6 @@ brew "starship"
 brew "ripgrep"
 brew "bottom"
 brew "git"
-brew "ripgrep"        # grep replacement (rg)
 
 # ── Dev tools ────────────────────────────
 brew "gh"             # GitHub CLI
