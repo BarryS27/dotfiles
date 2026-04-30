@@ -1,6 +1,6 @@
 # dotfiles
 
-Dotter-managed dotfiles for Zsh, Git, Ghostty and Zed. Plugin-free shell, settings.json for the editor.
+Dotter-managed dotfiles for Zsh, Git, Ghostty, and Zed. Plugin-free shell with a fast custom prompt.
 
 ## Install
 
@@ -18,25 +18,44 @@ The installer is idempotent. Re-running it backs up any real files that would be
 
 ```
 dotfiles/
+├── .bashrc                     bash fallback config
+├── .config/
+│   ├── Caddyfile               local reverse proxy config
+│   ├── bottom.toml             system monitor (btm) config
+│   ├── starship.toml           terminal behavior config
+│   └── config.ghostty          Ghostty terminal config
+├── .devcontainer/
+│   └── devcontainer.json       Codespaces / Dev Container setup
+├── .dotter/
+│   └── global.toml             dotter variables (name, font, paths, features)
 ├── bin/
-│   └── npm-publish.sh      version bump + publish to npm
-├── git/
-│   ├── .gitconfig          delta pager, rerere, histogram diff
-│   └── .gitignore_global
+│   └── npm-publish.sh          version bump + publish to npm
 ├── did/
-│   ├── bin/
-│   └── identity/
-└── zsh/
-    ├── .zprofile           PATH, exports, tool init (login shell)
-    ├── .zshrc              completion, prompt, zoxide, key bindings
-    ├── aliases.zsh         eza / bat / git / npm / python shortcuts
-    ├── functions.zsh       mkcd, up, extract, save, note, ...
-    └── fzf.zsh             keybindings, previews, fzf-branch, fzf-kill
+│   ├── bin/                    DID signing / verification scripts
+│   └── identity/               public key + DID document
+├── git/
+│   ├── .gitconfig              delta pager, rerere, histogram diff
+│   └── .gitignore_global
+├── templates/
+│   ├── biome.json              shared Biome (JS/TS linter) config
+│   └── pyproject.toml          shared Python project template
+├── zed/
+│   ├── settings.json           Zed editor settings
+│   └── asevka.toml             custom font variant config
+├── zsh/
+│   ├── .zprofile               PATH, exports, tool init (login shell)
+│   ├── .zshrc                  history, prompt, completion, key bindings
+│   ├── aliases.zsh             eza / bat / git / npm / python shortcuts
+│   ├── functions.zsh           mkcd, up, extract, save, note, ...
+│   └── fzf.zsh                 fzf key bindings, previews, fzf-branch, fzf-kill
+├── dotter.toml                 symlink map for all dotfile targets
+├── Brewfile                    macOS dependencies
+└── install.sh                  bootstrap: install deps + stow dotfiles
 ```
 
 ---
 
-## Key Bindings (Zsh)
+## Key Bindings (Zsh / fzf)
 
 | Key | Action |
 |-----|--------|
@@ -45,30 +64,6 @@ dotfiles/
 | `Alt-C` | cd into subdirectory via fzf |
 | `↑` / `↓` | history substring search by prefix |
 | `Ctrl-←` / `Ctrl-→` | word navigation |
-
-## Key Bindings (Neovim)
-
-`Space` is the leader key.
-
-| Key | Action |
-|-----|--------|
-| `<leader>ff` | find files |
-| `<leader>fg` | live grep |
-| `<leader>fb` | buffers |
-| `<leader>fo` | recent files |
-| `<leader>ft` | find TODOs |
-| `gd` | go to definition |
-| `gr` | go to references |
-| `K` | hover documentation |
-| `<leader>rn` | rename symbol |
-| `<leader>ca` | code action |
-| `<leader>lf` | format buffer |
-| `]d` / `[d` | next/prev diagnostic |
-| `]h` / `[h` | next/prev git hunk |
-| `<leader>gs` | stage hunk |
-| `<leader>gb` | git blame line |
-| `-` | open parent directory (oil) |
-| `<leader>xx` | toggle diagnostics panel |
 
 ---
 
@@ -81,10 +76,12 @@ dotfiles/
 | `mkcd <dir>` | create directory and cd into it |
 | `up [n]` | cd up n levels |
 | `extract <file>` | unpack any archive format |
+| `gitroot` | cd to repo root |
 | `fzf-branch` | switch git branch interactively |
 | `fzf-kill` | kill process with fzf |
 | `json [file]` | pretty-print JSON |
 | `port [n]` | show what is listening on a port |
+| `envdiff <file>` | show env changes after sourcing a file |
 
 ---
 
@@ -103,6 +100,8 @@ Machine-specific config that is not tracked:
 
 ## Dependencies
 
-Managed via `Brewfile` (macOS) or the `postCreateCommand` in `.devcontainer/devcontainer.json` (Linux/Codespaces).
+Managed via `Brewfile` (macOS) or the `postCreateCommand` in `.devcontainer/devcontainer.json` (Linux / Codespaces).
 
-Core: `stow`, `zsh`, `fzf`, `zoxide`, `fd`, `bat`, `eza`, `ripgrep`, `delta`, `neovim`, `gh`, `jq`
+Core: `dotter`, `stow`, `zsh`, `fzf`, `zoxide`, `fd`, `starship`, `ripgrep`, `bottom`, `git`, `gh`
+
+Dev: `uv`, `ruff`, `bun`, `rustup`, `biome`, `duckdb`
