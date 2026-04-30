@@ -1,0 +1,254 @@
+# ---------------------------------------------- #
+# --  asong56                                    #
+# --  bottom.toml                                #
+# --  clean version                              #
+# ---------------------------------------------- #
+[flags]
+
+hide_avg_cpu = false
+average_cpu_row = false
+
+dot_marker = false
+rate = "5s"
+
+cpu_left_legend = false
+current_usage = false
+unnormalized_cpu = false
+
+# Won't work if tree view is on
+group_processes = true
+
+case_sensitive = false
+whole_word = false
+regex = false
+
+temperature_type = "c"
+
+default_time_value = "300s"
+time_delta = 15000
+hide_time = false
+
+default_widget_type = "proc"
+default_widget_count = 1
+
+expanded = false
+
+basic = false
+use_old_network_legend = false
+table_gap = "space"
+
+battery = true
+
+disable_click = false
+disable_keys = false
+
+process_memory_as_value = true
+
+tree = true
+
+show_table_scroll_position = false
+show_table_scroll_bar = false
+
+process_command = false
+
+network_use_binary_prefix = true
+network_use_bytes = true
+network_use_log = false
+
+disable_advanced_kill = false
+read_only = false
+
+hide_k_threads = true
+disable_gpu = false
+enable_cache_memory = false
+
+#free_arc = false
+
+retention = "10m"
+
+# none, top-left, top, top-right, left, right, bottom-left, bottom, bottom-right
+memory_legend = "top-right"
+network_legend = "top-right"
+
+
+
+# ---------------------------------------------- #
+[processes]
+
+# PID, Name, CPU%, Mem%, R/s, W/s, T.Read, T.Write, User, State, Time, GMem%, GPU%, Nice, Priority
+columns = ["PID", "Name", "CPU%", "Mem%", "GMem%", "GPU%", "Nice"]
+
+get_threads = false
+
+
+
+# ---------------------------------------------- #
+[cpu]
+
+# all, average/avg
+default = "average"
+
+show_decimal = false
+
+
+
+# ---------------------------------------------- #
+[disk]
+
+# Disk, Mount, Used, Free, Total, Used%, Free%, R/s, W/s
+columns = ["Mount", "Used%", "Free"]
+default_sort = "Used%"
+
+
+[disk.name_filter]
+
+is_list_ignored = true
+list = [
+    "/dev/sda\\d+",
+    "/dev/nvme0n1p2",
+    "^/dev/disk", 
+    "com.apple.os.update",
+    "System Reserved", 
+    "Recovery",
+    "EFI"
+]
+regex = true
+case_sensitive = false
+whole_word = false
+
+
+[disk.mount_filter]
+
+is_list_ignored = true
+list = [
+    "/mnt/.*",
+    "/boot",
+    "^/System/Volumes/(VM|Preboot|Update|xarts|iSCPreboot|Hardware)",
+    "^/dev",
+    "/tmp"
+]
+regex = true
+case_sensitive = false
+whole_word = false
+
+
+
+# ---------------------------------------------- #
+[temperature]
+
+# Temp, Temperature, Sensor
+default_sort = "Temp"
+
+
+[temperature.sensor_filter]
+
+is_list_ignored = false
+list = [
+    "cpu",
+    "gpu",
+    "package",
+    "core",
+    "drive"
+]
+regex = false
+case_sensitive = false
+whole_word = false
+
+
+
+# ---------------------------------------------- #
+[network]
+
+
+[network.interface_filter]
+
+is_list_ignored = false
+list = [
+    "en0",
+    "Wi-Fi",
+    "Ethernet",
+    "en[1-9]"
+]
+regex = true
+case_sensitive = false
+whole_word = false
+
+
+
+# ---------------------------------------------- #
+[styles]
+# default, gruvbox, nord (& *-light)
+theme = "nord"
+
+#[styles.cpu]
+#all_entry_color = "green"
+#avg_entry_color = "red"
+#cpu_core_colors = ["light magenta", "light yellow", "light cyan", "light green", "light blue", "cyan", "green", "blue"]
+
+#[styles.memory]
+#ram_color = "light magenta"
+#cache_color = "light red"
+#swap_color = "light yellow"
+#arc_color = "light cyan"
+#gpu_colors = ["light blue", "light red", "cyan", "green", "blue", "red"]
+
+#[styles.network]
+#rx_color = "light magenta"
+#tx_color = "light yellow"
+#rx_total_color = "light cyan"
+#tx_total_color = "light green"
+
+#[styles.battery]
+#high_battery_color = "green"
+#medium_battery_color = "yellow"
+#low_battery_color = "red"
+
+#[styles.tables]
+#headers = {color = "light blue", bold = true}
+
+#[styles.graphs]
+#graph_color = "gray"
+#legend_text = {color = "gray"}
+
+#[styles.widgets]
+#border_color = "gray"
+#selected_border_color = "light blue"
+#widget_title = {color = "gray"}
+#text = {color = "gray"}
+#selected_text = {color = "black", bg_color = "light blue"}
+#disabled_text = {color = "dark gray"}
+# Disabled by default
+#bg_color = "black"
+# Only on Linux
+#thread_text = {color = "green"}
+
+# Layout - layouts follow a pattern like this:
+# [[row]] represents a row in the application.
+# [[row.child]] represents either a widget or a column.
+# [[row.child.child]] represents a widget.
+#
+# All widgets must have the type value set to one of ["cpu", "mem", "proc", "net", "temp", "disk", "empty"].
+# All layout components have a ratio value - if this is not set, then it defaults to 1.
+# The default widget layout:
+#[[row]]
+#  ratio=30
+#  [[row.child]]
+#  type="cpu"
+#[[row]]
+#    ratio=40
+#    [[row.child]]
+#      ratio=4
+#      type="mem"
+#    [[row.child]]
+#      ratio=3
+#      [[row.child.child]]
+#        type="temp"
+#      [[row.child.child]]
+#        type="disk"
+#[[row]]
+#  ratio=30
+#  [[row.child]]
+#    type="net"
+#  [[row.child]]
+#    type="proc"
+#    default=true
