@@ -1,0 +1,17 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+[directory]
+truncation_length = 1
+truncate_to_repo = true
+style = "bold italic cyan"
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+style = "dimmed white" # or bold red ?
+
+[package]
+disabled = true
