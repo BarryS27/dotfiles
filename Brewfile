@@ -3,11 +3,11 @@ tap "homebrew/bundle"
 tap "homebrew/services"
 
 # ── Shell & navigation ───────────────────
-brew "stow"           # symlink manager for dotfiles
+brew "dotter"
 brew "zsh"
 brew "fzf"            # fuzzy finder
-brew "zoxide"         # smart cd with frecency
-brew "fd"             # fast find, respects .gitignore
+brew "zoxide"         # smart cd with frequency
+brew "fd"             # fast find
 
 # ── Modern CLI replacements ──────────────
 brew "topgrade"
@@ -32,9 +32,6 @@ brew "biome"
 # cask "ghostty"
 # cask "beekeeper-studio"
 
-# cask "raycast"
-# cask "pearcleaner"
-# cask "espanso"
 # cask "localsend"
 
 # cask "proton-pass"
