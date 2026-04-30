@@ -1,18 +1,16 @@
 # dotfiles
 
-Stow-managed dotfiles for Zsh, Git, and Neovim. Plugin-free shell, lazy.nvim for the editor.
+Dotter-managed dotfiles for Zsh, Git, Ghostty and Zed. Plugin-free shell, settings.json for the editor.
 
 ## Install
 
 ```bash
-git clone https://github.com/BarryS27/dotfiles.git ~/dotfiles
+git clone https://github.com/asong56/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./install.sh
 ```
 
 The installer is idempotent. Re-running it backs up any real files that would be overwritten to `~/.dotfiles_backup/<timestamp>/`, then restows.
-
-On first Neovim launch, lazy.nvim bootstraps itself and installs all plugins automatically.
 
 ---
 
