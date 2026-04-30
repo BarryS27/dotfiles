@@ -1,0 +1,44 @@
+{
+    local_certs
+    encode zstd gzip
+    
+    log {
+        output file "{$LOG_PATH}/access.log" {
+            roll_size 10mb
+            roll_keep 5
+        }
+        level ERROR
+    }
+}
+
+(headeras) {
+    header {
+        Access-Control-Allow-Origin *
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+localhost {
+    import headeras
+
+    root * "{$PROJECT_ROOT}"
+    tls internal
+    
+    try_files {path} {path}/ /index.html
+    file_server {
+        precompressed zstd gzip
+        browse
+    }
+
+    handle_errors {
+        @custom_err file /{err.status_code}.html
+        handle @custom_err {
+            rewrite * /{err.status_code}.html
+            file_server
+        }
+        respond "{err.status_code} {err.status_text}"
+    }
+}
