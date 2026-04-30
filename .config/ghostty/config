@@ -1,0 +1,39 @@
+theme = nord
+minimum-contrast = 1.1
+background-opacity = 0.95
+background-blur = macos-glass-regular
+
+window-padding-x = 12
+window-padding-y = 10
+window-padding-balance = true
+
+macos-titlebar-style = transparent
+macos-titlebar-proxy-icon = hidden
+macos-window-buttons = visible
+
+font-family = "Monaspace Neon"
+font-size = 13
+adjust-cell-height = 10%
+
+font-thicken = false
+window-vsync = true
+custom-shader-animation = true
+scrollback-limit = 2000
+
+cursor-style = bar
+cursor-style-blink = true
+
+mouse-hide-while-typing = true
+
+quick-terminal-position = top
+quick-terminal-size = 40%
+quick-terminal-animation-duration = 0.2
+
+notify-on-command-finish = unfocused
+notify-on-command-finish-after = 5s
+
+shell-integration = detect
+window-inherit-working-directory = true
+
+clipboard-trim-trailing-spaces = true
+clipboard-paste-protection = true
