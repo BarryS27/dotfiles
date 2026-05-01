@@ -105,7 +105,7 @@ note() {
                   --preview-window='right:60%:wrap' \
                   --bind='ctrl-/:toggle-preview'
         )
-        [[ -n "$file" ]] && "${EDITOR:-nvim}" "$file"
+        [[ -n "$file" ]] && "$EDITOR" "$file"
     else
         # Fallback: plain grep
         grep -rn "${query}" "$base" --include="*.md" --color=always \
