@@ -23,25 +23,20 @@ export PROMPT_COMMAND="history -a; history -n"
 if tput setaf 1 &>/dev/null && [ "$(tput colors)" -ge 256 ]; then
 
     reset=$(tput sgr0)
-    bold=$(tput bold)
 
     blue=$(tput setaf 33)
-    cyan=$(tput setaf 37)
-    green=$(tput setaf 64)
     orange=$(tput setaf 166)
     purple=$(tput setaf 125)
     violet=$(tput setaf 61)
 
     p_blue="\001$blue\002"
-    p_cyan="\001$cyan\002"
-    p_green="\001$green\002"
     p_orange="\001$orange\002"
     p_purple="\001$purple\002"
     p_violet="\001$violet\002"
     p_reset="\001$reset\002"
 
 else
-    p_blue="" p_reset="" p_purple="" p_violet=""
+    p_blue="" p_reset="" p_purple="" p_violet="" p_orange=""
 fi
 
 
@@ -58,7 +53,7 @@ __git_prompt() {
     git diff --cached --quiet        || status+="+"
     git diff-files --quiet           || status+="!"
     [[ -n $(git ls-files --others --exclude-standard) ]] && status+="?"
-    git rev-parse --verify refs/stash &>/dev/null && status+="$"
+    git rev-parse --verify refs/stash &>/dev/null && status+='$'
 
     [[ -n $status ]] && status=" [$status]"
     GIT_PS1=" ${p_violet}on ${p_purple}${branch}${p_blue}${status}${p_reset}"
@@ -70,10 +65,10 @@ __git_prompt() {
 ########################################
 __build_prompt() {
     local s=$?
-    
+
     EXIT_PS1=""
     (( s != 0 )) && EXIT_PS1=" ${p_orange}✘${s}${p_reset}"
-    
+
     __git_prompt
 }
 
@@ -103,70 +98,47 @@ alias ..='cd ..'
 
 # Create + enter dir
 mkcd() {
+    [[ -z "$1" ]] && { echo "usage: mkcd <dir>" >&2; return 1; }
     mkdir -p "$1" && cd "$1"
 }
 
-# Safe Git Sync
+# Safe Git Sync — pull + add + commit [+ push]
+# Usage: save [path] ["message"] [--push]
 save() {
-    # 1. Verify we are in a Git repository
     git rev-parse --is-inside-work-tree &>/dev/null || {
-        echo "❌ Error: Not a git repository."
-        return 1
+        echo "❌ Not a git repository." >&2; return 1
     }
 
-    local target="."
-    local msg="Auto-update"
-    local do_push=false
+    local target="." msg="Update $(date +%F)" do_push=false
 
     for arg in "$@"; do
-        if [[ "$arg" == "--push" ]]; then
-            do_push=true
-        elif [[ "$target" == "." && "$arg" != -* ]]; then
-            target="$arg"
-        elif [[ "$msg" == "Auto-update" && "$arg" != -* ]]; then
-            msg="$arg"
-        fi
+        case "$arg" in
+            --push) do_push=true ;;
+            *)
+                if   [[ "$target" == "."        ]]; then target="$arg"
+                elif [[ "$msg"    == "Update "* ]]; then msg="$arg"
+                fi
+                ;;
+        esac
     done
 
-    local stashed=false
-
-    echo "💾 Syncing repository..."
-
-    if [[ -n $(git status --porcelain) ]]; then
-        echo "📦 Stashing current changes..."
-        git stash push -u -m "autosave-$(date +%F-%T)"
-        stashed=true
-    fi
-
-    echo "📥 Pulling remote changes (rebase)..."
-    git pull --rebase || {
-        echo "❌ Error: Pull failed. Please resolve manually."
-        return 1
-    }
-
-    if $stashed; then
-        echo "📤 Restoring stashed changes..."
-        git stash apply || {
-            echo "⚠️ Warning: Merge conflict detected. Stash retained for manual resolution."
-            return 1
-        }
-        git stash drop
-    fi
+    echo "📥 Pulling upstream changes..."
+    git pull --rebase --autostash || { echo "❌ Pull failed." >&2; return 1; }
 
     git add "$target"
 
-    if ! git diff-index --quiet HEAD --; then
-        git commit -m "$msg"
-        echo "✅ Changes committed locally."
-        
-        if $do_push; then
-            echo "🚀 Pushing to remote repository..."
-            git push && echo "✅ Push successful."
-        else
-            echo "ℹ️ Push skipped. Use 'git push' to upload, or run save with '--push'."
-        fi
+    if git diff-index --quiet HEAD --; then
+        echo "ℹ️  Nothing to commit."
+        $do_push && git push
+        return 0
+    fi
+
+    git commit -m "$msg" && echo "✅ Committed: $msg"
+
+    if $do_push; then
+        git push && echo "🚀 Pushed."
     else
-        echo "ℹ️ No changes detected to commit."
+        echo "ℹ️  Run 'git push' or 'save --push' to upload."
     fi
 }
 
@@ -175,6 +147,8 @@ save() {
 # 7. Performance Tweaks
 ########################################
 export LESS='-R -F -X'
+# EDITOR is intentionally vim here — bash is used in Codespaces/Linux
+# where Zed may not be available.
 export EDITOR=vim
 
 ulimit -n 8192 &>/dev/null
@@ -199,8 +173,6 @@ case "$(uname -s)" in
   Darwin) export OS=mac ;;
   Linux)  export OS=linux ;;
 esac
-
-[[ $OS == mac && -f "$DOTFILES/install/macos.sh" ]] && source "$DOTFILES/install/macos.sh"
 
 if [[ $OS == linux && -n "$CODESPACES" ]]; then
     export NODE_OPTIONS="--max-old-space-size=4096"
