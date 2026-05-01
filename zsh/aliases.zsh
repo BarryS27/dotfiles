@@ -19,7 +19,6 @@ fi
 if command -v bat &>/dev/null; then
     alias cat='bat --style=plain --paging=never'
     alias less='bat --paging=always'
-    alias bman='batman'   # bat-formatted man pages (requires bat-extras)
 fi
 
 ########################################
@@ -53,19 +52,11 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gl='git lg -20'
 alias gla='git lga -20'
-alias gco='git checkout'
 alias gsw='git switch'
 alias gbr='git branch'
 alias grst='git restore'
 alias gcp='git cherry-pick'
 alias gwip='git add -A && git commit -m "wip"'
-
-########################################
-# Editor
-########################################
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
 
 ########################################
 # Node / npm
@@ -95,8 +86,6 @@ alias reload='exec zsh'                # reload shell
 alias path='print -l $path'            # one entry per line
 alias myip='curl -s ifconfig.me'
 alias ports='lsof -i -P -n | grep LISTEN'
-alias week='date +%V'                  # ISO week number
-alias utc='date -u "+%Y-%m-%d %H:%M UTC"'
 
 ########################################
 # Safety
