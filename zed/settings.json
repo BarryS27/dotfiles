@@ -1,7 +1,4 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
+// Zed documentation: https://zed.dev/docs/configuring-zed
 //
 // To see all of Zed's default settings without changing your
 // custom settings, run `zed: open default settings` from the
@@ -20,7 +17,7 @@
   "buffer_font_size": 15,
   "http_proxy": "socks5h://localhost:10808",
 
-  // Languages
+  // Editor
   "editor": {
     "format_on_save": "on",
     "remove_trailing_whitespace": true,
@@ -52,7 +49,7 @@
     "detect_venv": "on"
   },
 
-  // Windows
+  // Panels & tabs
   "tab_bar": {
     "show_nav_history_buttons": true,
     "show": true
@@ -91,7 +88,7 @@
   },
   "use_smartcase_search": true,
 
-  // Auto
+  // Autosave & misc
   "autosave": {
     "after_delay": {
       "milliseconds": 1000
@@ -103,8 +100,6 @@
     "diagnostics": false,
     "metrics": false
   },
-
-  // Other
   "agent": {
     "favorite_models": [],
     "model_parameters": [],
