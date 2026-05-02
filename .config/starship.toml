@@ -1,5 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+palette = "catppuccin_mocha"
 add_newline = true
 
 [directory]
