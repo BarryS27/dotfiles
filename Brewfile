@@ -5,9 +5,9 @@ tap "homebrew/services"
 # ── Shell & navigation ───────────────────
 brew "dotter"
 brew "zsh"
-brew "fzf"            # fuzzy finder
-brew "zoxide"         # smart cd with frequency
-brew "fd"             # fast find
+brew "fzf"
+brew "zoxide"
+brew "fd"
 
 # ── Modern CLI replacements ──────────────
 brew "topgrade"
@@ -17,7 +17,7 @@ brew "bottom"
 brew "git"
 
 # ── Dev tools ────────────────────────────
-brew "gh"             # GitHub CLI
+brew "gh"
 
 # ── Runtimes ─────────────────────────────
 brew "uv"
